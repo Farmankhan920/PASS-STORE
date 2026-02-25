@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#E4ECFF">
+<title>Sign In — Pass Store</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+.auth-bg-orb{position:fixed;border-radius:50%;pointer-events:none;z-index:0}
+.orb1{width:300px;height:300px;top:-80px;left:-80px;background:radial-gradient(circle,rgba(74,108,247,0.18) 0%,transparent 70%)}
+.orb2{width:250px;height:250px;bottom:0;right:-60px;background:radial-gradient(circle,rgba(124,58,237,0.15) 0%,transparent 70%)}
+.auth-card{
+  flex:1;display:flex;flex-direction:column;
+  z-index:1;position:relative;
+}
+.divider-or{display:flex;align-items:center;gap:12px;margin:2px 0}
+.divider-or::before,.divider-or::after{content:'';flex:1;height:1.5px;background:var(--divider-strong)}
+.divider-or span{font-size:11px;font-weight:700;color:var(--text-ghost);letter-spacing:0.5px}
+.input-group{display:flex;flex-direction:column;gap:0}
+.floating-label{position:relative;margin-bottom:14px}
+.floating-label label{
+  position:absolute;left:48px;top:50%;transform:translateY(-50%);
+  font-size:14.5px;color:var(--text-ghost);font-weight:400;
+  transition:all 0.2s var(--ease-out);pointer-events:none;z-index:2;
+  white-space:nowrap;
+}
+.floating-label.no-left-icon label{left:18px}
+.floating-label input:focus + label,
+.floating-label input:not(:placeholder-shown) + label{
+  top:11px;font-size:10px;font-weight:700;color:var(--accent);
+  letter-spacing:0.5px;text-transform:uppercase;
+}
+.floating-label input{padding-top:20px;padding-bottom:6px;height:60px}
+.floating-label input:placeholder-shown::placeholder{color:transparent}
+.social-btn{
+  height:52px;border-radius:var(--radius-pill);
+  border:1.5px solid var(--glass-border);
+  background:var(--glass-bg-strong);
+  backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  font-size:14px;font-weight:600;font-family:'Sora',inherit;
+  color:var(--text-primary);cursor:pointer;
+  transition:transform 0.22s var(--spring),box-shadow 0.2s;
+  box-shadow:var(--glass-shadow);
+}
+.social-btn:active{transform:scale(0.97)}
+.bottom-sheet-close{display:none}
+</style>
+</head>
+<body>
+<div class="auth-bg-orb orb1"></div>
+<div class="auth-bg-orb orb2"></div>
+
+<div class="app-wrapper">
+<div class="auth-screen" style="max-width:430px;margin:0 auto">
+  
+  <div class="auth-header">
+    <div class="auth-logo">🔐</div>
+    <div class="auth-title" data-i18n="signInTitle">Welcome Back</div>
+    <div class="auth-subtitle" data-i18n="signInSubtitle">Sign in to your vault</div>
+  </div>
+
+  <div class="auth-form">
+    <div class="floating-label" id="wrap-email">
+      <div class="input-wrap">
+        <div class="input-icon-left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="4"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        </div>
+        <input class="form-input with-left-icon" type="email" id="email" placeholder="email" autocomplete="email">
+        <label for="email" data-i18n="emailPlaceholder">your@email.com</label>
+      </div>
+    </div>
+    <div id="emailError" class="error-text hidden"></div>
+
+    <div class="floating-label" id="wrap-password" style="margin-top:2px">
+      <div class="input-wrap">
+        <div class="input-icon-left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="4"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <input class="form-input with-left-icon has-icon-right" type="password" id="password" placeholder="password" autocomplete="current-password">
+        <label for="password" data-i18n="passwordMin">Password</label>
+        <button class="input-btn-right" id="togglePw" type="button" aria-label="Toggle">
+          <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+    </div>
+    <div id="passwordError" class="error-text hidden"></div>
+
+    <div id="generalError" class="error-text hidden" style="text-align:center;margin-top:-6px"></div>
+
+    <button class="btn btn-primary mt-16" id="signInBtn" style="font-size:15px;letter-spacing:0.2px">
+      <span data-i18n="signInBtn">Sign In</span>
+    </button>
+
+    <div class="divider-or"><span>OR</span></div>
+
+    <button class="social-btn" id="guestBtn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="5"/><path d="M3 21a9 9 0 0 1 18 0"/></svg>
+      Continue as Guest (Demo)
+    </button>
+
+    <div class="auth-switch">
+      <span data-i18n="noAccount">Don't have an account?</span>
+      <a href="signup.html" data-i18n="signUpLink"> Sign Up</a>
+    </div>
+  </div>
+
+  <div class="auth-footer">
+    🔒 Your data is encrypted &amp; stored securely
+  </div>
+
+  <!-- Lang Switcher -->
+  <div style="display:flex;justify-content:center;gap:8px;padding-bottom:24px;z-index:1;position:relative">
+    <button class="lang-chip" data-lang="en">EN</button>
+    <button class="lang-chip" data-lang="hi">हिं</button>
+    <button class="lang-chip" data-lang="hl">HIN</button>
+  </div>
+</div>
+</div>
+
+<script src="js/lang.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/app.js"></script>
+<script type="module">
+import { loginUser } from './js/auth.js';
+import { auth } from './js/firebase.js';
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+// Already logged in? redirect
+onAuthStateChanged(auth, (user) => {
+  if (user) window.location.href = 'home.html';
+});
+
+// Toggle password
+const togglePw = document.getElementById('togglePw');
+const pwInput = document.getElementById('password');
+togglePw.addEventListener('click', () => {
+  const isText = pwInput.type === 'text';
+  pwInput.type = isText ? 'password' : 'text';
+  togglePw.querySelector('svg').innerHTML = isText
+    ? '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>'
+    : '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
+});
+
+function setError(id, msg) {
+  const el = document.getElementById(id);
+  if (msg) { el.textContent = msg; el.classList.remove('hidden'); }
+  else el.classList.add('hidden');
+}
+function clearErrors() {
+  ['emailError','passwordError','generalError'].forEach(id => setError(id, ''));
+}
+
+// Sign In
+document.getElementById('signInBtn').addEventListener('click', async () => {
+  clearErrors();
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  let valid = true;
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    setError('emailError', t('invalidEmail')); valid = false;
+  }
+  if (!password || password.length < 6) {
+    setError('passwordError', t('weakPassword')); valid = false;
+  }
+  if (!valid) return;
+
+  const btn = document.getElementById('signInBtn');
+  btn.innerHTML = `<span class="loading-spinner"></span><span>${t('signingIn')}</span>`;
+  btn.disabled = true;
+
+  try {
+    await loginUser(email, password);
+    window.location.href = 'home.html';
+  } catch(e) {
+    btn.innerHTML = `<span>${t('signInBtn')}</span>`;
+    btn.disabled = false;
+    if (e.code === 'auth/user-not-found' || e.code === 'auth/wrong-password' || e.code === 'auth/invalid-credential') {
+      setError('generalError', t('wrongPassword'));
+    } else {
+      setError('generalError', t('authError'));
+    }
+    haptic('error');
+  }
+});
+
+// Enter key
+document.getElementById('password').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') document.getElementById('signInBtn').click();
+});
+
+// Guest demo (just redirect after mock login notice)
+document.getElementById('guestBtn').addEventListener('click', () => {
+  showToast('Demo mode — connect Firebase to enable real login', 'default', 3000);
+});
+
+initRipples();
+</script>
+</body>
+</html>

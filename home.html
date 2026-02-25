@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#E4ECFF">
+<title>Vault — Pass Store</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app-wrapper">
+
+  <header class="app-header animate-fade">
+    <div class="header-inner">
+      <div class="header-left">
+        <div id="userAvatar" class="avatar sm" style="margin-right:2px">?</div>
+        <div>
+          <div class="header-title">🔐 Pass Store</div>
+          <div class="header-subtitle" id="hdrSub">Loading...</div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <a href="settings.html" class="btn-icon" aria-label="Settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="scroll-area">
+    <!-- WELCOME CARD -->
+    <div class="glass animate-card" id="welcomeCard" style="border-radius:var(--radius-xl);padding:18px 20px;margin-bottom:16px;display:none">
+      <div style="font-size:12px;font-weight:700;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.7px;margin-bottom:4px" data-i18n="welcomeBack">Welcome back,</div>
+      <div style="font-size:20px;font-weight:800;letter-spacing:-0.6px;color:var(--text-primary)" id="welcomeName"></div>
+      <div style="font-size:12px;color:var(--text-secondary);margin-top:4px" id="welcomeEmail" style="font-family:'JetBrains Mono',monospace"></div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-row animate-card delay-1">
+      <div class="stat-card glass">
+        <div class="stat-num" id="statTotal">—</div>
+        <div class="stat-label" data-i18n="totalPasswords">Total Passwords</div>
+      </div>
+      <div class="stat-card glass">
+        <div class="stat-num" id="stat2FA">—</div>
+        <div class="stat-label" data-i18n="with2FA">With 2FA</div>
+      </div>
+    </div>
+
+    <!-- SEARCH -->
+    <div class="search-wrap animate-card delay-2">
+      <span class="search-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
+      </span>
+      <input class="search-bar" type="search" id="searchInput" data-i18n-placeholder="search" placeholder="Search passwords...">
+    </div>
+
+    <!-- LIST -->
+    <div id="passwordList">
+      <div class="skel-card skeleton delay-2 animate-card"></div>
+      <div class="skel-card skeleton delay-3 animate-card"></div>
+      <div class="skel-card skeleton delay-4 animate-card"></div>
+    </div>
+
+    <div class="empty-state hidden" id="emptyState">
+      <div class="empty-icon">🔒</div>
+      <div class="empty-title" data-i18n="noPasswords">Your vault is empty</div>
+      <div class="empty-sub" data-i18n="noPasswordsSub">Tap + to add your first password</div>
+    </div>
+    <div class="empty-state hidden" id="noResults">
+      <div class="empty-icon">🔍</div>
+      <div class="empty-title" data-i18n="noResults">No results found</div>
+      <div class="empty-sub" data-i18n="noResultsSub">Try a different keyword</div>
+    </div>
+  </div>
+
+  <a href="add.html" class="fab" aria-label="Add">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+  </a>
+
+  <nav class="bottom-nav">
+    <a href="home.html" class="nav-item active">
+      <div class="nav-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="4"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      </div>
+      <span data-i18n="home">Vault</span>
+    </a>
+    <a href="add.html" class="nav-item">
+      <div class="nav-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+      </div>
+      <span data-i18n="add">Add</span>
+    </a>
+    <a href="settings.html" class="nav-item">
+      <div class="nav-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </div>
+      <span data-i18n="settings">Settings</span>
+    </a>
+    <a href="about.html" class="nav-item">
+      <div class="nav-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M12 12v4"/></svg>
+      </div>
+      <span data-i18n="about">About</span>
+    </a>
+  </nav>
+</div>
+
+<script src="js/lang.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/app.js"></script>
+<script type="module">
+import { requireAuth } from './js/auth.js';
+import { getAllEntries } from './js/firestore.js';
+
+let allData = [];
+let currentUser = null;
+
+function renderCard(entry, delay = 0) {
+  const el = document.createElement('a');
+  el.href = `view.html?id=${entry.id}`;
+  el.className = 'card glass animate-card';
+  if (delay) el.style.animationDelay = `${delay * 0.05}s`;
+  el.innerHTML = `
+    <div class="card-inner">
+      <div class="card-icon">${getCatEmoji(entry.category)}</div>
+      <div class="card-content">
+        <div class="card-title">${escHtml(entry.siteName)}</div>
+        <div class="card-subtitle">${escHtml(entry.username)}</div>
+        <div class="card-meta">
+          <span class="badge">${t('categories.' + entry.category)}</span>
+          ${entry.twoFA ? '<span class="badge green">2FA</span>' : ''}
+        </div>
+      </div>
+      <svg class="card-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="m9 18 6-6-6-6"/></svg>
+    </div>`;
+  return el;
+}
+
+function render(data) {
+  const list = document.getElementById('passwordList');
+  const empty = document.getElementById('emptyState');
+  const noRes = document.getElementById('noResults');
+  list.innerHTML = '';
+  const q = document.getElementById('searchInput').value;
+  if (!data.length && !q) {
+    empty.classList.remove('hidden'); noRes.classList.add('hidden'); return;
+  }
+  if (!data.length) {
+    empty.classList.add('hidden'); noRes.classList.remove('hidden'); return;
+  }
+  empty.classList.add('hidden'); noRes.classList.add('hidden');
+  data.forEach((entry, i) => list.appendChild(renderCard(entry, i)));
+  initRipples();
+}
+
+function updateStats(data) {
+  document.getElementById('statTotal').textContent = data.length;
+  document.getElementById('stat2FA').textContent = data.filter(d => d.twoFA).length;
+  document.getElementById('hdrSub').textContent = data.length + ' ' + t('passwordCount');
+}
+
+async function load() {
+  try {
+    currentUser = await requireAuth();
+    // Update avatar and welcome
+    const name = currentUser.displayName || currentUser.email;
+    const initials = name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
+    document.getElementById('userAvatar').textContent = initials;
+    const welcomeCard = document.getElementById('welcomeCard');
+    welcomeCard.style.display = '';
+    document.getElementById('welcomeName').textContent = currentUser.displayName || 'User';
+    document.getElementById('welcomeEmail').textContent = currentUser.email;
+    document.getElementById('hdrSub').textContent = t('secureVault');
+
+    allData = await getAllEntries();
+    render(allData);
+    updateStats(allData);
+  } catch(e) {
+    // requireAuth already redirected
+  }
+}
+
+document.getElementById('searchInput').addEventListener('input', (e) => {
+  const q = e.target.value.toLowerCase().trim();
+  if (!q) { render(allData); return; }
+  render(allData.filter(d =>
+    (d.siteName||'').toLowerCase().includes(q) ||
+    (d.username||'').toLowerCase().includes(q) ||
+    (d.category||'').toLowerCase().includes(q)
+  ));
+});
+
+load();
+</script>
+</body>
+</html>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#E4ECFF">
+<title>Add Password — Pass Store</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+.strength-wrap{height:4px;background:var(--divider-strong);border-radius:99px;overflow:hidden;margin-top:8px}
+.strength-fill{height:100%;border-radius:99px;transition:width 0.4s var(--ease-out),background 0.4s;width:0}
+.strength-label{font-size:11px;font-weight:700;margin-top:5px}
+.pw-gen-row{display:flex;gap:8px;margin-top:10px}
+.pw-gen-btn{flex:1;height:42px;border-radius:var(--radius-pill);border:1.5px solid rgba(74,108,247,0.2);background:var(--accent-soft);color:var(--accent);font-size:12.5px;font-weight:700;font-family:'Sora',inherit;cursor:pointer;transition:transform 0.2s var(--spring);display:flex;align-items:center;justify-content:center;gap:6px}
+.pw-gen-btn:active{transform:scale(0.93)}
+.step-page.active{display:block}
+.step-page{display:none;animation:slideInRight 0.38s var(--spring-soft) both}
+.step-page.slide-back{animation:slideInLeft 0.38s var(--spring-soft) both}
+</style>
+</head>
+<body>
+<div class="app-wrapper">
+
+  <header class="app-header animate-fade">
+    <div class="header-inner">
+      <div class="flex-row">
+        <a href="home.html" class="btn-icon" aria-label="Back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="m15 18-6-6 6-6"/></svg>
+        </a>
+        <div style="margin-left:10px">
+          <div class="header-title" data-i18n="addPassword">Add Password</div>
+        </div>
+      </div>
+      <div id="stepLabel" style="font-size:13px;font-weight:700;color:var(--accent);background:var(--accent-soft);padding:4px 12px;border-radius:var(--radius-pill)">1 / 3</div>
+    </div>
+  </header>
+
+  <div class="scroll-area">
+    <div class="step-indicator animate-card">
+      <div class="step-dot active" id="dot0"></div>
+      <div class="step-dot" id="dot1"></div>
+      <div class="step-dot" id="dot2"></div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="step-page active" id="step0">
+      <div class="section-label" data-i18n="step1">Site Info</div>
+      <div class="form-section">
+        <label class="form-label" data-i18n="siteName">Site / App Name</label>
+        <input class="form-input" id="siteName" type="text" data-i18n-placeholder="siteNamePlaceholder" placeholder="e.g. Google, Instagram" autocomplete="off">
+      </div>
+      <div class="form-section">
+        <label class="form-label" data-i18n="website">Website</label>
+        <input class="form-input" id="website" type="url" data-i18n-placeholder="websitePlaceholder" placeholder="https://example.com" autocomplete="off">
+      </div>
+      <div class="form-section">
+        <label class="form-label" data-i18n="category">Category</label>
+        <div class="category-grid" id="catGrid">
+          <button class="cat-btn active" data-cat="social"><span>🌐</span><span class="label" data-i18n="categories.social">Social</span></button>
+          <button class="cat-btn" data-cat="email"><span>📧</span><span class="label" data-i18n="categories.email">Email</span></button>
+          <button class="cat-btn" data-cat="bank"><span>🏦</span><span class="label" data-i18n="categories.bank">Bank</span></button>
+          <button class="cat-btn" data-cat="work"><span>💼</span><span class="label" data-i18n="categories.work">Work</span></button>
+          <button class="cat-btn" data-cat="shop"><span>🛍️</span><span class="label" data-i18n="categories.shop">Shop</span></button>
+          <button class="cat-btn" data-cat="game"><span>🎮</span><span class="label" data-i18n="categories.game">Game</span></button>
+          <button class="cat-btn" data-cat="health"><span>🏥</span><span class="label" data-i18n="categories.health">Health</span></button>
+          <button class="cat-btn" data-cat="other"><span>🔑</span><span class="label" data-i18n="categories.other">Other</span></button>
+        </div>
+      </div>
+      <button class="btn btn-primary mt-16" id="next0" data-i18n="next">Continue</button>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step-page" id="step1">
+      <div class="section-label" data-i18n="step2">Credentials</div>
+      <div class="form-section">
+        <label class="form-label" data-i18n="username">Username / Email</label>
+        <input class="form-input" id="username" type="email" data-i18n-placeholder="usernamePlaceholder" placeholder="your@email.com" autocomplete="off">
+      </div>
+      <div class="form-section">
+        <label class="form-label" data-i18n="password">Password</label>
+        <div class="form-group">
+          <input class="form-input has-icon-right" id="password" type="password" data-i18n-placeholder="passwordPlaceholder" placeholder="Enter your password" autocomplete="off">
+          <button class="input-btn-right" id="togglePw" type="button">
+            <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+        <div class="strength-wrap"><div class="strength-fill" id="strengthFill"></div></div>
+        <div class="strength-label" id="strengthLabel" style="color:var(--text-tertiary)"></div>
+        <div class="pw-gen-row">
+          <button class="pw-gen-btn" id="genBtn" type="button">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg>
+            <span data-i18n="generate">Generate</span>
+          </button>
+          <button class="pw-gen-btn" id="regenBtn" type="button" style="opacity:0;pointer-events:none">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+            <span data-i18n="regenerate">Regenerate</span>
+          </button>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:16px">
+        <button class="btn btn-secondary" id="prev1" style="flex:1" data-i18n="prev">Back</button>
+        <button class="btn btn-primary" id="next1" style="flex:2" data-i18n="next">Continue</button>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step-page" id="step2">
+      <div class="section-label" data-i18n="step3">Extra Details</div>
+      <div class="form-section">
+        <label class="form-label" data-i18n="notes">Notes</label>
+        <textarea class="form-input" id="notes" rows="3" data-i18n-placeholder="notesPlaceholder" placeholder="Any extra info..."></textarea>
+      </div>
+      <div class="form-section">
+        <label class="form-label" data-i18n="twoFA">2FA Contact</label>
+        <input class="form-input" id="twoFA" type="text" data-i18n-placeholder="twoFAPlaceholder" placeholder="Phone or email for 2FA" autocomplete="off">
+      </div>
+      <div style="display:flex;gap:10px;margin-top:16px">
+        <button class="btn btn-secondary" id="prev2" style="flex:1" data-i18n="prev">Back</button>
+        <button class="btn btn-primary" id="saveBtn" style="flex:2" data-i18n="save">Save Password</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="js/lang.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/app.js"></script>
+<script type="module">
+import { requireAuth } from './js/auth.js';
+import { addEntry } from './js/firestore.js';
+
+requireAuth();
+
+let currentStep = 0;
+let selectedCat = 'social';
+
+// Category selection
+document.getElementById('catGrid').querySelectorAll('.cat-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedCat = btn.dataset.cat;
+    haptic('light');
+  });
+});
+
+function goTo(step, back = false) {
+  const pages = document.querySelectorAll('.step-page');
+  pages[currentStep].classList.remove('active');
+  currentStep = step;
+  const nextPage = pages[currentStep];
+  if (back) nextPage.classList.add('slide-back');
+  else nextPage.classList.remove('slide-back');
+  nextPage.classList.add('active');
+  // Update dots
+  document.querySelectorAll('.step-dot').forEach((dot, i) => {
+    dot.classList.toggle('active', i === currentStep);
+    dot.classList.toggle('done', i < currentStep);
+  });
+  document.getElementById('stepLabel').textContent = (currentStep + 1) + ' / 3';
+  haptic('light');
+}
+
+// Toggle password visibility
+const togglePw = document.getElementById('togglePw');
+const pwInput = document.getElementById('password');
+togglePw.addEventListener('click', () => {
+  const show = pwInput.type === 'password';
+  pwInput.type = show ? 'text' : 'password';
+  togglePw.querySelector('svg').innerHTML = show
+    ? '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>'
+    : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+});
+
+// Strength checker
+pwInput.addEventListener('input', () => {
+  const str = getStrength(pwInput.value);
+  const fill = document.getElementById('strengthFill');
+  fill.style.width = (str.score * 20) + '%';
+  fill.style.background = str.color || 'transparent';
+  const lbl = document.getElementById('strengthLabel');
+  lbl.textContent = str.label;
+  lbl.style.color = str.color || 'var(--text-ghost)';
+});
+
+// Generator
+document.getElementById('genBtn').addEventListener('click', () => {
+  const pw = generatePassword();
+  pwInput.value = pw;
+  pwInput.type = 'text';
+  pwInput.dispatchEvent(new Event('input'));
+  document.getElementById('regenBtn').style.opacity = '1';
+  document.getElementById('regenBtn').style.pointerEvents = '';
+  showToast(t('generated'), 'success');
+  haptic('medium');
+});
+document.getElementById('regenBtn').addEventListener('click', () => {
+  const pw = generatePassword();
+  pwInput.value = pw;
+  pwInput.dispatchEvent(new Event('input'));
+  haptic('light');
+});
+
+// Navigation
+document.getElementById('next0').addEventListener('click', () => {
+  if (!document.getElementById('siteName').value.trim()) {
+    showToast(t('fillRequired'), 'error'); haptic('error'); return;
+  }
+  goTo(1);
+});
+document.getElementById('next1').addEventListener('click', () => {
+  if (!document.getElementById('username').value.trim() || !document.getElementById('password').value) {
+    showToast(t('fillRequired'), 'error'); haptic('error'); return;
+  }
+  goTo(2);
+});
+document.getElementById('prev1').addEventListener('click', () => goTo(0, true));
+document.getElementById('prev2').addEventListener('click', () => goTo(1, true));
+
+// Save
+document.getElementById('saveBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('saveBtn');
+  btn.innerHTML = `<span class="loading-spinner"></span>`;
+  btn.disabled = true;
+  try {
+    await addEntry({
+      siteName: document.getElementById('siteName').value.trim(),
+      website: document.getElementById('website').value.trim(),
+      username: document.getElementById('username').value.trim(),
+      password: document.getElementById('password').value,
+      notes: document.getElementById('notes').value.trim(),
+      twoFA: document.getElementById('twoFA').value.trim(),
+      category: selectedCat
+    });
+    showToast(t('saved'), 'success');
+    haptic('medium');
+    setTimeout(() => window.location.href = 'home.html', 700);
+  } catch(e) {
+    btn.innerHTML = `<span>${t('save')}</span>`;
+    btn.disabled = false;
+    showToast(t('error'), 'error');
+    haptic('error');
+  }
+});
+
+initRipples();
+</script>
+</body>
+</html>

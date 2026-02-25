@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#E4ECFF">
+<title>About — Pass Store</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+.feature-item{display:flex;align-items:flex-start;gap:12px;padding:14px 0;border-bottom:1px solid var(--divider)}
+.feature-item:last-child{border-bottom:none;padding-bottom:0}
+.feature-emoji{font-size:22px;flex-shrink:0;margin-top:1px}
+.feature-title{font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:2px}
+.feature-desc{font-size:12.5px;color:var(--text-secondary);line-height:1.5}
+</style>
+</head>
+<body>
+<div class="app-wrapper">
+  <header class="app-header animate-fade">
+    <div class="header-inner">
+      <div class="flex-row">
+        <a href="settings.html" class="btn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="m15 18-6-6 6-6"/></svg></a>
+        <div style="margin-left:10px"><div class="header-title" data-i18n="aboutTitle">About Pass Store</div></div>
+      </div>
+    </div>
+  </header>
+
+  <div class="scroll-area">
+    <!-- Hero -->
+    <div class="glass animate-card" style="border-radius:var(--radius-2xl);padding:32px 24px;text-align:center;margin-bottom:16px">
+      <div style="font-size:64px;margin-bottom:12px">🔐</div>
+      <div style="font-size:26px;font-weight:800;letter-spacing:-0.8px;background:var(--accent-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px">Pass Store</div>
+      <div style="font-size:13px;color:var(--text-secondary)" data-i18n="tagline">Secure Your Digital Identity</div>
+      <div style="margin-top:12px">
+        <span class="badge">v<span data-i18n="appVersion">2.0.0</span></span>
+        <span class="badge blue" style="margin-left:6px">Stable</span>
+      </div>
+    </div>
+
+    <!-- Description -->
+    <div class="glass animate-card delay-1" style="border-radius:var(--radius-xl);padding:20px;margin-bottom:16px">
+      <p style="font-size:14px;color:var(--text-secondary);line-height:1.7">Pass Store is a modern, secure password manager built with a liquid glass aesthetic inspired by next-generation iOS design. All your passwords are encrypted and stored per-user in Firebase Firestore.</p>
+    </div>
+
+    <!-- Features -->
+    <div class="section-label animate-card delay-2">Features</div>
+    <div class="glass animate-card delay-2" style="border-radius:var(--radius-xl);padding:20px;margin-bottom:16px">
+      <div class="feature-item"><span class="feature-emoji">🌐</span><div><div class="feature-title">Tri-lingual</div><div class="feature-desc">Full support for English, Hindi and Hinglish</div></div></div>
+      <div class="feature-item"><span class="feature-emoji">🔐</span><div><div class="feature-title">Per-User Vault</div><div class="feature-desc">Each account has its own isolated password store in Firestore</div></div></div>
+      <div class="feature-item"><span class="feature-emoji">✨</span><div><div class="feature-title">Liquid Glass UI</div><div class="feature-desc">iPhone 17 inspired blur, frosted glass design system</div></div></div>
+      <div class="feature-item"><span class="feature-emoji">🛡️</span><div><div class="feature-title">2FA Support</div><div class="feature-desc">Store your two-factor authentication contacts alongside passwords</div></div></div>
+      <div class="feature-item"><span class="feature-emoji">🔑</span><div><div class="feature-title">Password Generator</div><div class="feature-desc">Generate cryptographically secure passwords instantly</div></div></div>
+      <div class="feature-item"><span class="feature-emoji">📱</span><div><div class="feature-title">APK Ready</div><div class="feature-desc">Mobile-first design optimized for HopWeb APK conversion</div></div></div>
+    </div>
+
+    <div class="section-label animate-card delay-3">Credits</div>
+    <div class="glass animate-card delay-3" style="border-radius:var(--radius-xl);padding:20px;text-align:center;margin-bottom:24px">
+      <div style="font-size:14px;color:var(--text-secondary);line-height:1.7" data-i18n="madeWith">Crafted with ♥ for secure password management</div>
+      <div style="font-size:12px;color:var(--text-ghost);margin-top:8px">Powered by Firebase • Sora Font • Liquid Glass Design</div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="home.html" class="nav-item"><div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="4"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><span data-i18n="home">Vault</span></a>
+    <a href="add.html" class="nav-item"><div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg></div><span data-i18n="add">Add</span></a>
+    <a href="settings.html" class="nav-item"><div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div><span data-i18n="settings">Settings</span></a>
+    <a href="about.html" class="nav-item active"><div class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M12 12v4"/></svg></div><span data-i18n="about">About</span></a>
+  </nav>
+</div>
+<script src="js/lang.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

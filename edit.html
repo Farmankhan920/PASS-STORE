@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#E4ECFF">
+<title>Edit — Pass Store</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+.strength-wrap{height:4px;background:var(--divider-strong);border-radius:99px;overflow:hidden;margin-top:8px}
+.strength-fill{height:100%;border-radius:99px;transition:width 0.4s var(--ease-out),background 0.4s;width:0}
+.strength-label{font-size:11px;font-weight:700;margin-top:5px}
+</style>
+</head>
+<body>
+<div class="app-wrapper">
+
+  <header class="app-header animate-fade">
+    <div class="header-inner">
+      <div class="flex-row">
+        <button onclick="history.back()" class="btn-icon" aria-label="Back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div style="margin-left:10px">
+          <div class="header-title" data-i18n="editPassword">Edit Password</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="scroll-area" id="content">
+    <div class="skel-card skeleton animate-card" style="height:64px;border-radius:var(--radius-xl)"></div>
+    <div class="skel-card skeleton animate-card delay-1" style="height:64px;border-radius:var(--radius-xl)"></div>
+    <div class="skel-card skeleton animate-card delay-2" style="height:64px;border-radius:var(--radius-xl)"></div>
+  </div>
+
+</div>
+
+<script src="js/lang.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/app.js"></script>
+<script type="module">
+import { requireAuth } from './js/auth.js';
+import { getEntry, updateEntry } from './js/firestore.js';
+
+const id = new URLSearchParams(location.search).get('id');
+if (!id) { window.location.href = 'home.html'; }
+
+let selectedCat = 'other';
+
+// Wait for auth first, then load
+requireAuth().then(() => {
+  load();
+}).catch(() => {});
+
+async function load() {
+  const entry = await getEntry(id);
+  if (!entry) { window.location.href = 'home.html'; return; }
+  selectedCat = entry.category || 'other';
+  renderForm(entry);
+}
+
+function renderForm(entry) {
+  const content = document.getElementById('content');
+  content.innerHTML = `
+    <div class="form-section animate-card">
+      <label class="form-label" data-i18n="siteName">Site / App Name</label>
+      <input class="form-input" id="siteName" type="text" value="${escHtml(entry.siteName)}" autocomplete="off">
+    </div>
+    <div class="form-section animate-card delay-1">
+      <label class="form-label" data-i18n="website">Website</label>
+      <input class="form-input" id="website" type="url" value="${escHtml(entry.website||'')}" placeholder="https://example.com" autocomplete="off">
+    </div>
+    <div class="form-section animate-card delay-1">
+      <label class="form-label" data-i18n="username">Username / Email</label>
+      <input class="form-input" id="username" type="text" value="${escHtml(entry.username)}" autocomplete="off">
+    </div>
+    <div class="form-section animate-card delay-2">
+      <label class="form-label" data-i18n="password">Password</label>
+      <div class="form-group">
+        <input class="form-input has-icon-right" id="password" type="password" value="${escHtml(entry.password)}" autocomplete="off">
+        <button class="input-btn-right" id="togglePw" type="button">
+          <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+      <div class="strength-wrap"><div class="strength-fill" id="strengthFill" style="width:${getStrength(entry.password).score*20}%;background:${getStrength(entry.password).color}"></div></div>
+      <div class="strength-label" id="strengthLabel" style="color:${getStrength(entry.password).color}">${getStrength(entry.password).label}</div>
+    </div>
+    <div class="form-section animate-card delay-2">
+      <label class="form-label" data-i18n="category">Category</label>
+      <div class="category-grid" id="catGrid">
+        ${['social','email','bank','work','shop','game','health','other'].map(cat =>
+          `<button class="cat-btn${selectedCat===cat?' active':''}" data-cat="${cat}">
+            <span>${getCatEmoji(cat)}</span>
+            <span class="label" data-i18n="categories.${cat}">${cat}</span>
+          </button>`
+        ).join('')}
+      </div>
+    </div>
+    <div class="form-section animate-card delay-3">
+      <label class="form-label" data-i18n="notes">Notes</label>
+      <textarea class="form-input" id="notes" rows="3" placeholder="${t('notesPlaceholder')}">${escHtml(entry.notes||'')}</textarea>
+    </div>
+    <div class="form-section animate-card delay-3">
+      <label class="form-label" data-i18n="twoFA">2FA Contact</label>
+      <input class="form-input" id="twoFA" type="text" value="${escHtml(entry.twoFA||'')}" placeholder="${t('twoFAPlaceholder')}" autocomplete="off">
+    </div>
+    <button class="btn btn-primary mt-8 mb-16 animate-card delay-4" id="updateBtn" data-i18n="update">Update Password</button>
+  `;
+  applyLang();
+
+  document.getElementById('catGrid').querySelectorAll('.cat-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedCat = btn.dataset.cat;
+      haptic('light');
+    });
+  });
+
+  const togglePw = document.getElementById('togglePw');
+  const pwInput = document.getElementById('password');
+  togglePw.addEventListener('click', () => {
+    pwInput.type = pwInput.type === 'password' ? 'text' : 'password';
+  });
+
+  pwInput.addEventListener('input', () => {
+    const str = getStrength(pwInput.value);
+    document.getElementById('strengthFill').style.cssText = `width:${str.score*20}%;background:${str.color||'transparent'}`;
+    const lbl = document.getElementById('strengthLabel');
+    lbl.textContent = str.label;
+    lbl.style.color = str.color || 'var(--text-ghost)';
+  });
+
+  document.getElementById('updateBtn').addEventListener('click', async () => {
+    if (!document.getElementById('siteName').value.trim() || !document.getElementById('username').value.trim() || !pwInput.value) {
+      showToast(t('fillRequired'), 'error'); haptic('error'); return;
+    }
+    const btn = document.getElementById('updateBtn');
+    btn.innerHTML = `<span class="loading-spinner"></span>`;
+    btn.disabled = true;
+    try {
+      await updateEntry(id, {
+        siteName: document.getElementById('siteName').value.trim(),
+        website: document.getElementById('website').value.trim(),
+        username: document.getElementById('username').value.trim(),
+        password: pwInput.value,
+        notes: document.getElementById('notes').value.trim(),
+        twoFA: document.getElementById('twoFA').value.trim(),
+        category: selectedCat
+      });
+      showToast(t('updated'), 'success');
+      haptic('medium');
+      setTimeout(() => window.location.href = `view.html?id=${id}`, 700);
+    } catch(e) {
+      btn.innerHTML = `<span>${t('update')}</span>`;
+      btn.disabled = false;
+      showToast(t('error'), 'error');
+    }
+  });
+
+  initRipples();
+}
+
+load();
+</script>
+</body>
+</html>
